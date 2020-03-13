@@ -2,11 +2,11 @@ apiVersion: v1
 entries:
   keepalived:
   - apiVersion: v1
-    created: "2020-03-13T18:16:22.016418784+01:00"
+    created: "2020-03-13T18:39:45.749555234+01:00"
     description: Cloud Proivder of Keepalived to support LoadBalancer type of service
-    digest: ae0853061a8ecf8b51b8f62fa16b09120a899b20267d288a539ba18ea8dd41cb
+    digest: 2ebccea4f394bda7e832b051851424adf569fac3793bd12e79411a7f8d65d2b8
     name: keepalived
     urls:
     - https://moritz31.github.io/helm/keepalived-0.1.0.tgz
     version: 0.1.0
-generated: "2020-03-13T18:16:22.015987981+01:00"
+generated: "2020-03-13T18:39:45.749175002+01:00"
