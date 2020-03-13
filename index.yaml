@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  keepalived:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2020-03-13T17:43:14.522196823+01:00"
+    description: A Helm chart for Kubernetes
+    digest: 7be79188c93a7d1283eee91bc286189dea65df6d5558624b7e04594c80ef810a
+    name: keepalived
+    type: application
+    urls:
+    - https://moritz31.github.io/helm/keepalived-0.1.0.tgz
+    version: 0.1.0
+generated: "2020-03-13T17:43:14.521587165+01:00"
