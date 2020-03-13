@@ -1,0 +1,46 @@
+# ------------------- daemonset ------------------- #
+
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ template "fullname" }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "fullname" }}
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      namespace: {{ .Values.namespace }}
+      labels:
+        app: keepalived
+    spec:
+      hostNetwork: true
+      containers:
+      - name: {{ template "fullname" }}
+        image: {{ .Values.keepalived.image.repository }}
+        imagePullPolicy: {{ .Values.keepalived.image.imagePullPolicy }}
+        resources:
+          requests:
+            memory: "4Mi"
+            cpu: "2m"
+          limits:
+            #memory: "128Mi"
+            #cpu: "500m"
+        securityContext:
+          privileged: true
+        env:
+        #- name: KEEPALIVED_PRIORITY
+        #  value: "$(${HOSTIP}|cut -d. -f4)"
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: KEEPALIVED_VIRTUAL_IP
+          value: {{ .Values.keepalived.virtualIP }}
+        - name: KEEPALIVED_PASSWORD
+          value: test
