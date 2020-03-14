@@ -1,46 +1,53 @@
-# ------------------- daemonset ------------------- #
-
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ template "fullname" }}
+  name: {{ include "keepalived.fullname" . }}
   namespace: {{ .Values.namespace }}
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    {{- include "keepalived.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: {{ template "fullname" }}
-  updateStrategy:
-    type: RollingUpdate
+      {{- include "keepalived.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       namespace: {{ .Values.namespace }}
       labels:
-        app: keepalived
+        {{- include "keepalived.selectorLabels" . | nindent 8 }}
     spec:
       hostNetwork: true
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-      - name: {{ template "fullname" }}
-        image: {{ .Values.keepalived.image.repository }}
-        imagePullPolicy: {{ .Values.keepalived.image.imagePullPolicy }}
-        resources:
-          requests:
-            memory: "4Mi"
-            cpu: "2m"
-          limits:
-            #memory: "128Mi"
-            #cpu: "500m"
-        securityContext:
-          privileged: true
-        env:
-        #- name: KEEPALIVED_PRIORITY
-        #  value: "$(${HOSTIP}|cut -d. -f4)"
-        - name: HOST_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        - name: KEEPALIVED_VIRTUAL_IP
-          value: {{ .Values.keepalived.virtualIP }}
-        - name: KEEPALIVED_PASSWORD
-          value: test
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: KEEPALIVED_VIRTUAL_IP
+              value: {{ .Values.virtualIP }}
+            - name: KEEPALIVED_PASSWORD
+              value: test
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
