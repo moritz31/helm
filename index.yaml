@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  unifi:
+  - apiVersion: v2
+    appVersion: "5.6"
+    created: "2020-05-17T20:35:24.348542873Z"
+    description: Helmchart for unifi controller
+    digest: 0a6a7775df1af3e3d1508229b38719a99d7ecd10f46c36652e06312dd9079b04
+    name: unifi
+    type: application
+    urls:
+    - https://github.com/moritz31/helm/releases/download/unifi-0.1.1/unifi-0.1.1.tgz
+    version: 0.1.1
+generated: "2020-05-17T20:35:24.265741069Z"
