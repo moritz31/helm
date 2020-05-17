@@ -1,0 +1,24 @@
+{{- if and .Values.persistentVolumeClaim.enabled (not .Values.persistentVolumeClaim.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "unifi.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "unifi.name" . }}
+    helm.sh/chart: {{ include "unifi.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  accessModes:
+{{ toYaml .Values.persistentVolumeClaim.accessModes | indent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.persistentVolumeClaim.size | quote }}
+{{- if .Values.persistentVolumeClaim.storageClass }}
+{{- if (eq "-" .Values.persistentVolumeClaim.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.persistentVolumeClaim.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end -}}
