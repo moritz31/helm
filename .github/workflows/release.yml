@@ -17,6 +17,10 @@ jobs:
           git config user.name "Moritz Weichert"
           git config user.email "moritz@kirstein.me"
 
+      - name: Check for gh-pages branch
+        run: |
+          git ls-remote --exit-code --heads origin gh-pages
+
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.0.0-rc.2
         env:
