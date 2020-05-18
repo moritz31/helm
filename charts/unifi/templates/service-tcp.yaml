@@ -7,6 +7,9 @@ metadata:
     helm.sh/chart: {{ include "unifi.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- if .Values.serviceTCP.annotations }}
+  annotations:
+{{ toYaml .Values.serviceTCP.annotations | indent 4 }}
 spec:
   type: {{ .Values.serviceTCP.type }}
   {{- if .Values.serviceTCP.loadBalancerIP }}
